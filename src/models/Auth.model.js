@@ -1,33 +1,31 @@
-const { User } = require('../schema/User');
 const { compare, hash, genSalt } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
+const config = require('config');
 
-module.exports.login = ({ email, password }) => {
+const { User } = require('../schema/User');
+const JWT_SECRET = config.get('JWT_SECRET');
+
+module.exports.login = async ({ email, password }) => {
   try {
     const user = await User.findOne({ 'local.email': email });
 
     if (!user) {
-      throw new Error('User havenn\'t been exists?');
-      }
-    
-      const match = await compare(password, user.local.password);
+      throw new Error("User havenn't been exists?");
+    }
 
-      if (!match) {
-          throw new Error('Password is not match');
-      }
+    const match = await compare(password, user.local.password);
 
-      const payload = {
-          user: {
-              id: user._id
-          }
-      }
+    if (!match) {
+      throw new Error('Password is not match');
+    }
 
-      const token = sign(payload, 'hieu', {
-          expiresIn: 60 * 60 * 1000
-      });
+    const payload = { user: { id: user._id } };
 
-      return token;
+    const token = await sign(payload, JWT_SECRET, {
+      expiresIn: 60 * 60 * 1000,
+    });
 
+    return token;
   } catch (err) {
     throw err;
   }
@@ -35,7 +33,9 @@ module.exports.login = ({ email, password }) => {
 
 module.exports.register = async ({ name, email, password }) => {
   try {
-    const user = await User.findOne({ 'local.email': email }).populate('local');
+    const user = await User.findOne({ 'local.email': email }).select(
+      'local.email'
+    );
 
     if (user) {
       throw new Error('User have been exists?');
@@ -43,24 +43,21 @@ module.exports.register = async ({ name, email, password }) => {
 
     const newUser = new User({
       name,
-      email,
-      password,
+      local: {
+        email,
+        password,
+      },
     });
+    const salt = await genSalt(10);
 
-    const salt = genSalt(10);
-
-    newUser.password = await hash(password, salt);
+    newUser.local['password'] = await hash(password, salt);
 
     await newUser.save();
 
-    const payload = {
-        user: {
-          id: newUser._id
-        }
-    }
-      
-    const token = sign(payload, 'hieu', {
-        expiresIn: 60 * 60 * 1000
+    const payload = { user: { id: newUser._id } };
+
+    const token = await sign(payload, JWT_SECRET, {
+      expiresIn: 60 * 60 * 1000,
     });
 
     return token;

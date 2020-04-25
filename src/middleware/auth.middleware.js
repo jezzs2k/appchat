@@ -1,12 +1,16 @@
 const { verify } = require('jsonwebtoken');
+const config = require('config');
 
-module.exports.authMiddleware = async (req, res, next) => {
+const JWT_SECRET = config.get('JWT_SECRET');
+
+module.exports = async (req, res, next) => {
   try {
     const token = req.header('auth-token');
-    const decoded = verify(token, 'hieu');
+    const decoded = verify(token, JWT_SECRET);
 
     if (!decoded) {
       res.status(400).json('No Token');
+      return;
     }
 
     req.user = decoded.user;

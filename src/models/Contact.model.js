@@ -1,4 +1,5 @@
 const { Contact } = require('../schema/Contact');
+const { User } = require('../schema/User');
 const { findReceiver } = require('./Conversation.model');
 
 module.exports.createContact = async ({ userId, contactId }) => {
@@ -13,26 +14,33 @@ module.exports.createContact = async ({ userId, contactId }) => {
   }
 };
 
-module.exports.acceptContact = async ({ userId, contactId }) => {
+module.exports.acceptContact = async (userId, contact) => {
   try {
-    const contact = await Contact.findOne({
+    const user = await User.findOne({
+      _id: userId,
+    }).select('_id name avatar');
+
+    const contactStore = await Contact.findOne({
       contactId: userId,
-      userId: contactId,
+      userId: contact._id,
       isFriend: false,
     });
 
-    if (!contact) {
+    if (!contactStore) {
       throw new Error("You don't have require friend now ?");
     }
 
-    findReceiver({ userId, contactId });
+    const newFriend = await Contact.findOneAndUpdate(
+      { userId: contact._id },
+      {
+        $set: {
+          isFriend: true,
+        },
+        new: true,
+      }
+    );
 
-    const newFriend = await Contact.findByIdAndUpdate(contact._id, {
-      $set: {
-        isFriend: true,
-      },
-      new: true,
-    });
+    await findReceiver(user, contact);
 
     return newFriend;
   } catch (err) {
@@ -49,42 +57,12 @@ module.exports.deleteContact = async ({ userId, contactId }) => {
       ],
     });
 
-    console.log(contact);
-    //test
-
-    const contact_1 = await Contact.findOne({
-      contactId,
-      userId,
-    });
-
-    const contact_2 = await Contact.findOne({
-      userId: contactId,
-      contactId: userId,
-    });
-
-    const deleteFriend = null;
-
-    if (contact_1) {
-      deleteFriend = await Contact.findByIdAndUpdate(contact_1._id, {
-        $set: {
-          isFriend: false,
-          deleteAt: new Date().getTime(),
-        },
-        new: true,
-      });
-    } else if (contact_2) {
-      deleteFriend = await Contact.findByIdAndUpdate(contact_2._id, {
-        $set: {
-          isFriend: false,
-          deleteAt: new Date().getTime(),
-        },
-        new: true,
-      });
-    } else {
+    if (!contact) {
       throw new Error("Don't have contact ?");
     }
+    const deleteFriend = await Contact.findByIdAndDelete(contact._id);
 
-    return deleteContact;
+    return deleteFriend;
   } catch (err) {
     throw err;
   }
@@ -92,7 +70,12 @@ module.exports.deleteContact = async ({ userId, contactId }) => {
 
 module.exports.getFriendActive = async (userId) => {
   try {
-    const friendsActive = await find({ userId, isFriend: true });
+    const friendsActive = await Contact.find({
+      $or: [
+        { userId, isFriend: true },
+        { contactId: userId, isFriend: true },
+      ],
+    });
     if (!friendsActive) {
       throw new Error("You don't have friend!!");
     }
@@ -105,8 +88,11 @@ module.exports.getFriendActive = async (userId) => {
 
 module.exports.getFriendNoActive = async (userId) => {
   try {
-    const friendsNoActive = await find({ userId, isFriend: false });
-    if (!friendsActive) {
+    const friendsNoActive = await Contact.find({
+      contactId: userId,
+      isFriend: false,
+    });
+    if (!friendsNoActive) {
       throw new Error("You don't have require friend!!");
     }
 
@@ -118,7 +104,7 @@ module.exports.getFriendNoActive = async (userId) => {
 
 module.exports.getRequireFriend = async (userId) => {
   try {
-    const friendsNoAccept = await find({ userId, isFriend: false });
+    const friendsNoAccept = await Contact.find({ userId, isFriend: false });
     if (!friendsNoAccept) {
       throw new Error('Require friend accept empty!!');
     }

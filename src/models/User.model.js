@@ -2,7 +2,7 @@ const { User } = require('../schema/User');
 
 module.exports.getAllUser = async () => {
   try {
-    const users = await User.find().select('local').select('google');
+    const users = await User.find({ isActive: true }).select('_id name avatar');
 
     return users;
   } catch (err) {
@@ -12,7 +12,9 @@ module.exports.getAllUser = async () => {
 
 module.exports.getUserById = async (id) => {
   try {
-    const user = await User.findById(id).select('local');
+    const user = await User.findOne({ _id: id, isActive: true }).select(
+      '_id name avatar'
+    );
     if (!user) {
       throw new Error('Nguoi dung khong ton tai');
     }
@@ -24,8 +26,8 @@ module.exports.getUserById = async (id) => {
 
 module.exports.updateUser = async (_id, data) => {
   try {
-    const user = await User.findById(_id).select('local');
-    if (!user) {
+    const userStore = await User.findById(_id).select('local');
+    if (!userStore) {
       throw new Error('Nguoi dung khong ton tai');
     }
 
@@ -33,7 +35,7 @@ module.exports.updateUser = async (_id, data) => {
       _id,
       { $set: data },
       { new: true }
-    );
+    ).select('_id name updatedAt avatar age phone');
 
     return user;
   } catch (err) {
@@ -41,15 +43,15 @@ module.exports.updateUser = async (_id, data) => {
   }
 };
 
-module.exports.updateUser = async (_id) => {
+module.exports.deleteUser = async (_id) => {
   try {
-    const user = await User.findById(_id).select('local');
+    const userStore = await User.findById(_id).select('_id');
 
-    if (!user) {
+    if (!userStore) {
       throw new Error('Nguoi dung khong ton tai');
     }
 
-    const user = await User.findOneAndUpdate(_id, { $set: data });
+    const user = await User.findByIdAndDelete(_id);
 
     return user;
   } catch (err) {

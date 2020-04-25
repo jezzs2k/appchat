@@ -3,8 +3,8 @@ const { Conversation } = require('../schema/Conversation');
 const createConversation = async ({ sender, receiver, text }) => {
   try {
     const newConversation = new Conversation({
-      senderId: sender.id,
-      receiverId: receiver.id,
+      senderId: sender._id,
+      receiverId: receiver._id,
       sender,
       receiver,
       lastMess: text,
@@ -18,16 +18,12 @@ const createConversation = async ({ sender, receiver, text }) => {
   }
 };
 
-module.exports.findReceiver = async ({
-  sender,
-  receiver,
-  text = 'Xin Chao',
-}) => {
+module.exports.findReceiver = async (sender, receiver, text = 'Xin Chao') => {
   try {
-    const conversation = await Conversation.findOne({
+    let conversation = await Conversation.findOne({
       $or: [
-        { senderId: sender.id, receiverId: receiver.id },
-        { receiverId: sender.id, senderId: receiver.id },
+        { senderId: sender._id, receiverId: receiver._id },
+        { receiverId: sender._id, senderId: receiver._id },
       ],
     });
 

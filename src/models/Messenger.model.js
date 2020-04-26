@@ -2,12 +2,12 @@ const { Messenger } = require('../schema/Messenger');
 const { Conversation } = require('../schema/Conversation');
 const { findReceiver } = require('./Conversation.model');
 
-module.exports.getMessengers = async ({ senderId, receiverId }) => {
+module.exports.getMessengers = async (senderId, receiverId) => {
   try {
     const conversation = await Conversation.findOne({
       $or: [
-        { senderId: senderId, receiverId: receiverId },
-        { receiverId: senderId, senderId: receiverId },
+        { 'sender._id': senderId, 'receiver._id': receiverId },
+        { 'receiver._id': senderId, 'sender._id': receiverId },
       ],
     });
 
@@ -21,18 +21,16 @@ module.exports.getMessengers = async ({ senderId, receiverId }) => {
   }
 };
 
-module.exports.sendMessenger = async ({ sender, receiver, text }) => {
+module.exports.sendMessenger = async ({ senderId, receiverId, text }) => {
   try {
-    const conversation = findReceiver({ sender, receiver, text });
+    const conversation = await findReceiver(senderId, receiverId, text);
 
     const newMessenger = new Messenger({
       sender: {
-        name: sender.name,
-        avatar: sender.avatar,
+        ...conversation.sender,
       },
       receiver: {
-        name: receiver.name,
-        avatar: receiver.avatar,
+        ...conversation.receiver,
       },
       text: text,
       conversationId: conversation._id,

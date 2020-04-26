@@ -1,4 +1,5 @@
 const { body } = require('express-validator');
+
 const { CREATE_USER, LOGIN } = require('./types');
 
 exports.validate = (method) => {

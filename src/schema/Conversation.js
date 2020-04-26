@@ -6,11 +6,11 @@ const ConversationSchema = new Schema(
       type: String,
       required: true,
     },
-    senderId: {
-      type: Schema.Types.ObjectId,
-      ref: 'user',
-    },
     sender: {
+      _id: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+      },
       name: {
         type: String,
         required: true,
@@ -20,11 +20,11 @@ const ConversationSchema = new Schema(
         required: true,
       },
     },
-    receiverId: {
-      type: Schema.Types.ObjectId,
-      ref: 'user',
-    },
     receiver: {
+      _id: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+      },
       name: {
         type: String,
         required: true,

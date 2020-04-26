@@ -14,7 +14,7 @@ module.exports.createContact = async ({ userId, contactId }) => {
   }
 };
 
-module.exports.acceptContact = async (userId, contact) => {
+module.exports.acceptContact = async (userId, contactUser) => {
   try {
     const user = await User.findOne({
       _id: userId,
@@ -22,7 +22,7 @@ module.exports.acceptContact = async (userId, contact) => {
 
     const contactStore = await Contact.findOne({
       contactId: userId,
-      userId: contact._id,
+      userId: contactUser._id,
       isFriend: false,
     });
 
@@ -31,7 +31,7 @@ module.exports.acceptContact = async (userId, contact) => {
     }
 
     const newFriend = await Contact.findOneAndUpdate(
-      { userId: contact._id },
+      { userId: contactUser._id },
       {
         $set: {
           isFriend: true,
@@ -40,7 +40,7 @@ module.exports.acceptContact = async (userId, contact) => {
       }
     );
 
-    await findReceiver(user, contact);
+    await findReceiver(user, contactUser);
 
     return newFriend;
   } catch (err) {

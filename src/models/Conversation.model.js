@@ -25,7 +25,7 @@ module.exports.findReceiver = async (sender, receiver, text = 'Xin Chao') => {
         { senderId: sender._id, receiverId: receiver._id },
         { receiverId: sender._id, senderId: receiver._id },
       ],
-    });
+    }).select('_id');
 
     if (!conversation) {
       conversation = createConversation({ sender, receiver, text });
@@ -37,31 +37,23 @@ module.exports.findReceiver = async (sender, receiver, text = 'Xin Chao') => {
   }
 };
 
-module.exports.getLatestConversation = async () => {
+module.exports.getLatestConversation = async (currentUserId) => {
   try {
-    const conversationLatest = await Conversation.findOne({}, [], {
-      $orderby: { createdAt: -1 },
+    const conversationLatest = await Conversation.find({
+      $or: [{ senderId: currentUserId }, { receiverId: currentUserId }],
     });
-    // const conversations = await Conversation.find({
-    //     $or: [{ senderId: currentUserId },
-    //     { receiverId: currentUserId }]
-    // })
 
-    // if (!conversations) {
-    //     throw new Error('User don\'t have messenger');
-    // }
+    if (conversationLatest.length > 1) {
+      conversationLatest.sort();
+    }
 
-    // conversations.find((conversation) => {
-
-    // })
-
-    return conversationLatest;
+    return conversationLatest[0];
   } catch (err) {
     throw err;
   }
 };
 
-module.exports.getConversation = async (currentUserId) => {
+module.exports.getConversations = async (currentUserId) => {
   try {
     const conversations = await Conversation.find({
       $or: [{ senderId: currentUserId }, { receiverId: currentUserId }],

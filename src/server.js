@@ -15,10 +15,12 @@ app.use(express.urlencoded({ extended: true }));
 const authRoute = require('./routes/auth.route');
 const userRoute = require('./routes/user.route');
 const contactRoute = require('./routes/contact.route');
+const conversationRoute = require('./routes/Conversation.route');
 
 app.use('/api/auth', authRoute);
 app.use('/api/users', userRoute);
 app.use('/api/contacts', contactRoute);
+app.use('/api/conversations', conversationRoute);
 
 app.listen(PORT, () => {
   console.log('Server on with port: ', PORT);

@@ -5,6 +5,8 @@ const {
   deleteUser,
 } = require('../models/User.model');
 
+const httpStatus = require('../config/httpStatus');
+
 //@ router   GET /api/users
 //@ des      get all user
 //@ access   private
@@ -12,10 +14,18 @@ module.exports.getAllUser = async (req, res) => {
   try {
     const users = await getAllUser();
 
-    return res.status(200).json(users);
+    return res.status(httpStatus.ok).json({
+      msg: 'GET USERS',
+      data: users,
+      success: true,
+    });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json('Server error');
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      msg: 'internal server error',
+      data: null,
+      success: false,
+    });
   }
 };
 
@@ -28,10 +38,18 @@ module.exports.getUserById = async (req, res) => {
 
     const user = await getUserById(userId);
 
-    return res.status(200).json(user);
+    return res.status(httpStatus.ok).json({
+      msg: 'GET USER BY ID',
+      data: user,
+      success: true,
+    });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json('Server error');
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      msg: 'internal server error',
+      data: null,
+      success: false,
+    });
   }
 };
 
@@ -45,10 +63,18 @@ module.exports.updateUser = async (req, res) => {
 
     const user = await updateUser(userId, data);
 
-    return res.status(200).json(user);
+    return res.status(httpStatus.ok).json({
+      msg: 'UPDATE USER',
+      data: user,
+      success: true,
+    });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json('Server error');
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      msg: 'internal server error',
+      data: null,
+      success: false,
+    });
   }
 };
 
@@ -61,9 +87,17 @@ module.exports.deleteUser = async (req, res) => {
 
     const byeUser = await deleteUser(userId);
 
-    return res.status(200).json(byeUser);
+    return res.status(httpStatus.ok).json({
+      msg: 'DELETE USER',
+      data: byeUser,
+      success: true,
+    });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json('Server error');
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      msg: 'internal server error',
+      data: null,
+      success: false,
+    });
   }
 };

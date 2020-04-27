@@ -1,9 +1,9 @@
 const { compare, hash, genSalt } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
-const config = require('config');
 
 const { User } = require('../schema/User');
-const JWT_SECRET = config.get('JWT_SECRET');
+const defaultValue = require('../config/default');
+const JWT_SECRET = defaultValue.JWT_SECRET;
 
 module.exports.login = async ({ email, password }) => {
   try {

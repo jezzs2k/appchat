@@ -1,7 +1,7 @@
 const { connect } = require('mongoose');
-const config = require('config');
+const defaultValue = require('./default');
 
-const mongoURL = config.get('MONGO_URL');
+const mongoURL = defaultValue.MONGO_URL;
 
 const connectDB = async () => {
   try {

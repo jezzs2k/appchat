@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 
 const { login, register } = require('../models/Auth.model');
+const httpStatus = require('../config/httpStatus');
 
 //@ router   POST /api/auth/login
 //@ des      login into app
@@ -10,7 +11,7 @@ module.exports.login = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(400).json({ errors: errors.array() });
+      res.status(httpStatus.BAD_REQUEST).json({ errors: errors.array() });
       return;
     }
 
@@ -21,10 +22,18 @@ module.exports.login = async (req, res) => {
 
     const token = await login(data);
 
-    return res.status(200).json({ token });
+    return res.status(httpStatus.ok).json({
+      msg: 'LOGIN',
+      data: { token },
+      success: true,
+    });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json('Server error');
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      msg: 'Internal server error',
+      data: null,
+      success: false,
+    });
   }
 };
 
@@ -48,9 +57,17 @@ module.exports.register = async (req, res) => {
 
     const token = await register(data);
 
-    return res.status(200).json({ token });
+    return res.status(httpStatus.CREATED).json({
+      msg: 'REGISTER',
+      data: { token },
+      success: true,
+    });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json('Server error');
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      msg: 'Internal server error',
+      data: null,
+      success: false,
+    });
   }
 };

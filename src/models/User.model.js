@@ -2,7 +2,13 @@ const { User } = require('../schema/User');
 
 module.exports.getAllUser = async () => {
   try {
-    const users = await User.find({ isActive: true }).select('_id name avatar');
+    const users = await User.find(
+      { isActive: true },
+      {},
+      {
+        limit: 10,
+      }
+    ).select('_id name avatar');
 
     return users;
   } catch (err) {

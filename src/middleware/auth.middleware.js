@@ -1,7 +1,7 @@
 const { verify } = require('jsonwebtoken');
-const config = require('config');
+const defaultValue = require('../config/default');
 
-const JWT_SECRET = config.get('JWT_SECRET');
+const JWT_SECRET = defaultValue.JWT_SECRET;
 
 module.exports = async (req, res, next) => {
   try {

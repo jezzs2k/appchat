@@ -2,29 +2,48 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
 const useStyle = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    maxWidth: '50%',
     margin: 'auto',
-    border: '1px solid #bdc3c7',
-    boxShadow: '1px 1px 5px #bdc3c7',
+    maxWidth: '100%',
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: '50%',
+    },
   },
   title: {
     textAlign: 'center',
     width: '100%',
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     color: '#3f51b5',
+    paddingTop: '1em',
   },
   form: {
-    padding: '2.5em',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: '2em',
+    border: '1px solid #bdc3c7',
+    boxShadow: '1px 1px 5px #bdc3c7',
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: '25ch',
+    width: '26ch',
+    margin: 0,
+  },
+  link: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    color: '#3f51b5',
+    textDecoration: 'none',
+    marginTop: '20px',
+  },
+  buttonType: {
+    marginTop: '10px',
   },
 }));
 
@@ -50,13 +69,13 @@ const Login = () => {
 
   return (
     <div className={classes.root}>
-      <h2 className={classes.title}>LOGIN</h2>
       <div className={classes.form}>
+        <h2 className={classes.title}>LOGIN</h2>
         <TextField
           name='email'
           id='stander-full-width'
           label='Email'
-          style={{ margin: 8 }}
+          style={{ marginBottom: 8 }}
           placeholder='Email...'
           fullWidth
           margin='normal'
@@ -70,7 +89,7 @@ const Login = () => {
         <TextField
           name='password'
           label='Password'
-          style={{ margin: 8 }}
+          style={{ marginBottom: 8 }}
           placeholder='Password...'
           fullWidth
           margin='normal'
@@ -82,9 +101,29 @@ const Login = () => {
           onChange={onChange}
           required
         />
-        <Button onClick={onSubmit} variant='contained' color='primary'>
+        <Button
+          onClick={onSubmit}
+          className={classes.buttonType}
+          variant='contained'>
           Login
         </Button>
+        <Button
+          onClick={onSubmit}
+          className={classes.buttonType}
+          variant='contained'
+          color='secondary'>
+          Google+
+        </Button>
+        <Button
+          onClick={onSubmit}
+          className={classes.buttonType}
+          variant='contained'
+          color='primary'>
+          Facebook
+        </Button>
+        <Link className={classes.link} to='/register'>
+          Create new account !
+        </Link>
       </div>
     </div>
   );

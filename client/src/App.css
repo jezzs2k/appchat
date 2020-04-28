@@ -2,3 +2,39 @@
   margin: 0;
   padding: 0;
 }
+
+.Messenger {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.3fr 4fr;
+}
+
+.Messenger .center {
+  display: grid;
+  grid-template-rows: 1fr 9fr;
+  grid-template-columns: 4fr 1.5fr;
+}
+
+.center .top {
+  grid-column: 1/3;
+}
+
+@media screen and (max-width: 1024px) {
+  .Messenger {
+    grid-template-columns: 2fr 4fr;
+  }
+
+  .center .right {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .Messenger {
+    grid-template-columns: 2fr 3fr;
+  }
+
+  .right {
+    display: none;
+  }
+}

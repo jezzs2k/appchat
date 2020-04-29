@@ -8,6 +8,9 @@ import './App.css';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Conversation from './components/Conversation/Conversation';
+import MessengerTop from './components/Messenger/MessengerTop';
+import MessengerBottom from './components/Messenger/MessengerBottom';
+import Messenger from './components/Messenger/Messenger';
 
 function App() {
   return (
@@ -15,13 +18,19 @@ function App() {
       <div className='App'>
         <Navbar />
         <div className='Messenger'>
-          <div className='left'>
+          <div className='left' id='scrollBar2'>
             <Conversation />
           </div>
-          <div className='center'>
-            <div className='top'>Top</div>
-            <div className='content'>center</div>
-            <div className='right'>Right</div>
+          <div className='right'>
+            <div className='top'>
+              <MessengerTop />
+            </div>
+            <div className='content'>
+              <Messenger />
+            </div>
+            <div className='bottom'>
+              <MessengerBottom />
+            </div>
           </div>
         </div>
         <Switch>

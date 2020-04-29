@@ -1,40 +1,73 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .Messenger {
   width: 100%;
+  position: fixed;
+  height: 100%;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 1.3fr 4fr;
 }
 
-.Messenger .center {
-  display: grid;
-  grid-template-rows: 1fr 9fr;
-  grid-template-columns: 4fr 1.5fr;
+.Messenger .left {
+  height: 100%;
+  overflow-y: scroll;
+  box-sizing: border-box;
 }
 
-.center .top {
-  grid-column: 1/3;
+#scrollBar2::-webkit-scrollbar {
+  width: 3px;
+  background-color: #f5f5f5;
+}
+
+#scrollBar2::-webkit-scrollbar-thumb {
+  background-color: #3f51b5;
+}
+
+#scrollBar2::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+
+.Messenger .center {
+  height: 100%;
+  overflow: hidden;
+}
+
+.Messenger .right .top {
+  display: flex;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 10px 0;
+}
+
+.Messenger .right .content {
+  width: 100%;
+  position: relative;
+  overflow-y: hidden;
+}
+
+.Messenger .right .bottom {
+  display: flex;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 10px 0;
+  position: relative;
+  bottom: 0;
 }
 
 @media screen and (max-width: 1024px) {
   .Messenger {
     grid-template-columns: 2fr 4fr;
   }
-
-  .center .right {
-    display: none;
-  }
 }
 
 @media screen and (max-width: 600px) {
   .Messenger {
     grid-template-columns: 2fr 3fr;
-  }
-
-  .right {
-    display: none;
   }
 }

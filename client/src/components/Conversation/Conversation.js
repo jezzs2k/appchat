@@ -7,7 +7,7 @@ import ConversationItem from './ConversationItem';
 const dataDemo = [
   {
     _id: 1,
-    name: 'Just is demo name',
+    name: 'Just is demo name1',
     avatar: 'https://picsum.photos/id/237/200/300',
     lastMess: 'Xin Chao',
   },
@@ -69,10 +69,8 @@ const dataDemo = [
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
-    borderRight: '1px solid #f2f2f2',
+    borderRight: '1px solid #e5e5e5',
     padding: '0 5px',
   },
 }));

@@ -1,4 +1,5 @@
 import React from 'react';
+import configureSocket from './socket';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Navbar from './components/Layout/Navbar';
@@ -13,7 +14,9 @@ import Store from './Store';
 import ChatUi from './components/Layout/ChatUi';
 import Alert from './components/Layout/Alert';
 
-function App() {
+export const socket = configureSocket(Store.dispatch);
+
+export default function App() {
   return (
     <Provider store={Store}>
       <Router>
@@ -30,5 +33,3 @@ function App() {
     </Provider>
   );
 }
-
-export default App;

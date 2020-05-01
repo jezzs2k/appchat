@@ -21,7 +21,8 @@
     "express-validator": "^6.4.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
-    "mongoose": "^5.9.10"
+    "mongoose": "^5.9.10",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"

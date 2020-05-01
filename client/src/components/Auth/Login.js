@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+
+import { login } from '../../action/authAction';
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -47,7 +50,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = ({ login, history, isAuthenticated }) => {
   const classes = useStyle();
 
   const [state, setState] = useState({
@@ -63,9 +66,16 @@ const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log({ ...state });
+    login({ email, password });
     setState({ email: '', password: '' });
   };
+
+  useEffect(() => {
+    if (isAuthenticated || localStorage.token) {
+      history.push('/');
+    }
+    // eslint-disable-next-line
+  }, [isAuthenticated]);
 
   return (
     <div className={classes.root}>
@@ -129,4 +139,8 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(Login);

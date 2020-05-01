@@ -1,4 +1,5 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
+import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,17 +9,19 @@ import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import TelegramIcon from '@material-ui/icons/Telegram';
+import Avatar from '@material-ui/core/Avatar';
+
+import { loadUser } from '../../action/authAction';
 
 import useStyles from './NavbarCss';
 
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ loadUser, user, isAuthenticated }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -42,6 +45,13 @@ const Navbar = () => {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  useEffect(() => {
+    if (localStorage.token) {
+      loadUser();
+    }
+    // eslint-disable-next-line
+  }, [isAuthenticated]);
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -90,7 +100,7 @@ const Navbar = () => {
           aria-controls='primary-search-account-menu'
           aria-haspopup='true'
           color='inherit'>
-          <AccountCircle />
+          {user && <Avatar alt={user.name} src={user.avatar} />}
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -113,7 +123,7 @@ const Navbar = () => {
           <Typography className={classes.title} variant='h6' noWrap>
             Messenger
           </Typography>
-          {true ? (
+          {isAuthenticated ? (
             <Fragment>
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
@@ -154,7 +164,7 @@ const Navbar = () => {
                   aria-haspopup='true'
                   onClick={handleProfileMenuOpen}
                   color='inherit'>
-                  <AccountCircle />
+                  {user && <Avatar alt={user.name} src={user.avatar} />}
                 </IconButton>
               </div>
               <div className={classes.sectionMobile}>
@@ -194,4 +204,9 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { loadUser })(Navbar);

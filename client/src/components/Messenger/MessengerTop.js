@@ -8,7 +8,7 @@ const MessengerTop = () => {
   return (
     <Fragment>
       <div style={classes.title}>
-        <Avatar alt='HIEU' src='https://picsum.photos/id/237/200/300' />
+        <Avatar alt='HIEU' src='htsdd00' />
         <div style={classes.text}>
           <h2>Vu Thanh Hieu</h2>
           <p style={{ fontSize: '0.8em', color: 'rgba(0, 0, 0, 0.54)' }}>

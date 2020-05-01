@@ -1,0 +1,14 @@
+export const GET_MESSENGER = 'GET_MESSENGER';
+export const SEND_MESSENGER = 'SEND_MESSENGER';
+export const SEND_ERROR = 'SEND_ERROR';
+export const GET_CONVERSATION = 'GET_CONVERSATION';
+export const GET_FRIENDS = 'GET_FRIENDS';
+export const LOGIN = 'LOGIN';
+export const REGISTER = 'REGISTER';
+export const LOGOUT = 'LOGOUT';
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const MAKE_FRIEND = 'MAKE_FRIEND';
+export const ACCEPT_FRIEND = 'ACCEPT_FRIEND';
+export const GET_ERROR = 'GET_ERROR';
+export const SET_LOADING = 'SET_LOADING';
+export const LOAD_USER = 'LOAD_USER';

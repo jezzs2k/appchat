@@ -65,8 +65,25 @@
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
   .Messenger {
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: 1fr 8fr;
+  }
+  .MuiListItemText-multiline,
+  .MuiButton-text {
+    display: none;
+  }
+  .makeStyles-root-144,
+  .makeStyles-root-144 {
+    padding: 0 !important;
+  }
+  .MuiListItem-gutters {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .MuiListItemIcon-root {
+    align-items: center;
+    justify-content: center;
   }
 }

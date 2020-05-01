@@ -32,44 +32,44 @@ const dataDemo = [
   {
     sender: {
       name: 'Vu Thanh Hieu',
-      avatar: 'https://picsum.photos/id/237/200/300',
+      avatar: 'sss',
     },
     receiver: {
       name: 'Phan thanh hung',
-      avatar: 'https://picsum.photos/200/300?grayscale',
+      avatar: 'hsss',
     },
     text: 'hey',
   },
   {
     sender: {
       name: 'Phan Thanh Hung',
-      avatar: 'https://picsum.photos/200/300?grayscale',
+      avatar: 'hsss',
     },
     receiver: {
       name: 'Vu Thanh Hieu',
-      avatar: 'https://picsum.photos/id/237/200/300',
+      avatar: 'sss',
     },
     text: 'dadasdasdkjaskd',
   },
   {
     sender: {
       name: 'Vu Thanh Hieu',
-      avatar: 'https://picsum.photos/id/237/200/300',
+      avatar: 'sss',
     },
     receiver: {
       name: 'Phan thanh hung',
-      avatar: 'https://picsum.photos/id/237/200/300',
+      avatar: 'sss',
     },
     text: 'palapdacnakdasdkadnksad',
   },
   {
     sender: {
       name: 'Phan Thanh Hung',
-      avatar: 'https://picsum.photos/200/300?grayscale',
+      avatar: 'hsss',
     },
     receiver: {
       name: 'Vu Thanh Hieu',
-      avatar: 'https://picsum.photos/id/237/200/300',
+      avatar: 'sss',
     },
     text:
       'dadasdasdkdsdsdsdsjaskddadasdasdkdsdsdsdsjaskddadasdasdkdsdsdsdsjaskddadasdasdkdsdsdsdsjaskd',
@@ -77,7 +77,7 @@ const dataDemo = [
   {
     sender: {
       name: 'Phan Thanh Hung',
-      avatar: 'https://picsum.photos/200/300?grayscale',
+      avatar: 'hsss',
     },
     text:
       'dadasdasdkdsdsdsdsjaskddadasdasdkdsdsdsdsjaskddadasdasdkdsdsdsdsjaskddadasdasdkdsdsdsdsjaskd',
@@ -85,7 +85,7 @@ const dataDemo = [
   {
     sender: {
       name: 'Phan Thanh Hung',
-      avatar: 'https://picsum.photos/200/300?grayscale',
+      avatar: 'hsss',
     },
     text:
       'dadasdasdkdsdsdsdsjaskddadasdasdkdsdsdsdsjaskddadasdasdkdsdsdsdsjaskddadasdasdkdsdsdsdsjaskd',

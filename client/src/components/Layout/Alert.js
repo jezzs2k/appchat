@@ -1,4 +1,5 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 
@@ -19,10 +20,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AlertNotification = () => {
+const AlertNotification = ({ error }) => {
   const classes = useStyles();
 
   const [alerts, setAlert] = useState([]);
+
+  useEffect(() => {
+    if (error) {
+      setAlert([...alerts, { type: 'error', msg: error.message }]);
+      setTimeout(() => {
+        setAlert([]);
+      }, 2000);
+    }
+
+    // eslint-disable-next-line
+  }, [error]);
 
   return (
     <Fragment>
@@ -35,17 +47,12 @@ const AlertNotification = () => {
           ))}
         </div>
       )}
-      <button
-        onClick={() => {
-          setAlert([{ type: 'success', msg: 'Login successfully' }]);
-          setTimeout(() => {
-            setAlert([]);
-          }, 2000);
-        }}>
-        TEST ALERT
-      </button>
     </Fragment>
   );
 };
 
-export default AlertNotification;
+const mapStateToProps = (state) => ({
+  error: state.auth.error,
+});
+
+export default connect(mapStateToProps, null)(AlertNotification);

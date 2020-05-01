@@ -29,6 +29,29 @@ module.exports.getAllUser = async (req, res) => {
   }
 };
 
+//@ router   GET /api/users/user
+//@ des      get user
+//@ access   private
+module.exports.getUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await getUserById(userId);
+
+    return res.status(httpStatus.ok).json({
+      msg: 'GET USER',
+      data: user,
+      success: true,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      msg: 'internal server error',
+      data: null,
+      success: false,
+    });
+  }
+};
+
 //@ router   GET /api/users/:id
 //@ des      get user by id
 //@ access   private

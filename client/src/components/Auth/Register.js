@@ -1,46 +1,14 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-const useStyle = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    maxWidth: '100%',
-    [theme.breakpoints.up('sm')]: {
-      maxWidth: '50%',
-    },
-    margin: 'auto',
-  },
-  form: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    padding: '2em',
-    border: '1px solid #bdc3c7',
-    boxShadow: '1px 1px 5px #bdc3c7',
-  },
-  title: {
-    textAlign: 'center',
-    width: '100%',
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    color: '#3f51b5',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: '25ch',
-    display: 'flex',
-    margin: 0,
-  },
-  textInfo: {
-    display: 'flex',
-  },
-}));
+import { register } from '../../action/authAction';
 
-const Register = () => {
+import useStyle from './RegisterCss';
+
+const Register = ({ register, isAuthenticated, history }) => {
   const classes = useStyle();
 
   const [state, setState] = useState({
@@ -59,9 +27,16 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log({ ...state });
+    register({ ...state });
     setState({ name: '', phone: '', email: '', password: '', age: 18 });
   };
+
+  useEffect(() => {
+    if (isAuthenticated || localStorage.token) {
+      history.push('/');
+    }
+    // eslint-disable-next-line
+  }, [isAuthenticated]);
   return (
     <div className={classes.root}>
       <div className={classes.form}>
@@ -131,4 +106,7 @@ const Register = () => {
   );
 };
 
-export default Register;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+export default connect(mapStateToProps, { register })(Register);

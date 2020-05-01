@@ -10,13 +10,13 @@ module.exports.login = async ({ email, password }) => {
     const user = await User.findOne({ 'local.email': email });
 
     if (!user) {
-      throw new Error("User havenn't been exists?");
+      throw Error("User havenn't been exists?");
     }
 
     const match = await compare(password, user.local.password);
 
     if (!match) {
-      throw new Error('Password is not match');
+      throw Error('Password is not match');
     }
 
     const payload = { user: { id: user._id } };
@@ -27,7 +27,7 @@ module.exports.login = async ({ email, password }) => {
 
     return token;
   } catch (err) {
-    throw err;
+    throw Error(err);
   }
 };
 

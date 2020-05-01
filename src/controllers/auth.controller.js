@@ -30,7 +30,7 @@ module.exports.login = async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'Internal server error',
+      msg: err.message,
       data: null,
       success: false,
     });
@@ -65,7 +65,7 @@ module.exports.register = async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'Internal server error',
+      msg: err.message,
       data: null,
       success: false,
     });

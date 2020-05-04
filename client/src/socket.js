@@ -1,14 +1,14 @@
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:8080');
+const chat = io.connect('http://localhost:8080/chat');
 
 const configureSocket = (dispatch) => {
-  socket.on('connect', () => {
+  chat.on('connect', () => {
     console.log('connected');
   });
 
   //make something
-  return socket;
+  return chat;
 };
 
 export default configureSocket;

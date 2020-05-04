@@ -73,9 +73,16 @@ module.exports.getLatestConversation = async (currentUserId) => {
 
 module.exports.getConversations = async (currentUserId) => {
   try {
-    const conversations = await Conversation.find({
-      $or: [{ 'sender._id': currentUserId }, { 'receiver._id': currentUserId }],
-    });
+    const conversations = await Conversation.find(
+      {
+        $or: [
+          { 'sender._id': currentUserId },
+          { 'receiver._id': currentUserId },
+        ],
+      },
+      [],
+      { sort: { updatedAt: -1 } }
+    );
 
     if (!conversations) {
       throw new Error("User don't have messenger");

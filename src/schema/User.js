@@ -11,7 +11,7 @@ const UserSchema = new Schema(
     },
     avatar: {
       type: String,
-      default: 'avatar-default',
+      default: 'https://picsum.photos/200/300',
     },
     age: {
       type: Number,

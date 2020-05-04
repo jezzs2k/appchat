@@ -8,15 +8,15 @@ import './App.css';
 
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
-
-import { Provider } from 'react-redux';
-import Store from './Store';
 import ChatUi from './components/Layout/ChatUi';
 import Alert from './components/Layout/Alert';
 
-export const socket = configureSocket(Store.dispatch);
+import { Provider } from 'react-redux';
+import Store from './redux/Store';
 
-export default function App() {
+const socket = configureSocket(Store.dispatch);
+
+const App = () => {
   return (
     <Provider store={Store}>
       <Router>
@@ -32,4 +32,6 @@ export default function App() {
       </Router>
     </Provider>
   );
-}
+};
+
+export { socket, App };

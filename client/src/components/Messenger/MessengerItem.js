@@ -1,11 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 
-const MessengerItem = ({ messenger }) => {
+const MessengerItem = ({ messenger, name }) => {
   const { text, sender, receiver } = messenger;
   return (
     <div style={{ width: '100%' }}>
-      {sender && (
+      {sender.name === name && (
         <div
           className='sender'
           style={{
@@ -32,7 +33,7 @@ const MessengerItem = ({ messenger }) => {
           />
         </div>
       )}
-      {receiver && (
+      {receiver.name === name && (
         <div
           className='receiver'
           style={{
@@ -62,4 +63,8 @@ const MessengerItem = ({ messenger }) => {
   );
 };
 
-export default MessengerItem;
+const mapStateToProps = (state) => ({
+  name: state.auth.user.name,
+});
+
+export default connect(mapStateToProps, null)(MessengerItem);

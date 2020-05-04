@@ -8,7 +8,7 @@ import {
 } from './types.js';
 import axios from 'axios';
 
-import setToken from '../utils/setToken';
+import setToken from '../../utils/setToken';
 
 export const login = (data) => async (dispatch) => {
   try {
@@ -88,6 +88,10 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
-export const setLoading = () => {
-  return { type: SET_LOADING };
+export const logout = () => (dispatch) => {
+  dispatch({ type: LOGOUT });
+};
+
+export const setLoading = () => (dispatch) => {
+  dispatch({ type: SET_LOADING });
 };

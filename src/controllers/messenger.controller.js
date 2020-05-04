@@ -4,14 +4,13 @@ const { validationResult } = require('express-validator');
 const httpStatus = require('../config/httpStatus');
 
 //@ router   GET /api/messengers/id
-//@ des      get all messenger by conversation and user id of receiver
+//@ des      get all messenger by conversation and use id of conversation
 //@ access   private
 module.exports.getMess = async (req, res) => {
   try {
-    const senderId = req.user.id;
-    const receiverId = req.params.id;
+    const conversationId = req.params.id;
 
-    const messengers = await getMessengers(senderId, receiverId);
+    const messengers = await getMessengers(conversationId);
 
     return res.status(httpStatus.ok).json({
       msg: 'get messenger of user',
@@ -40,13 +39,11 @@ module.exports.sendMess = async (req, res) => {
       return;
     }
 
-    const data = {
-      senderId: req.user.id,
-      receiverId: req.body.receiverId,
-      text: req.body.text,
-    };
-
-    const newMessenger = await sendMessenger(data);
+    const newMessenger = await sendMessenger(
+      req.user.id,
+      req.body.receiverId,
+      req.body.text
+    );
 
     return res.status(httpStatus.CREATED).json({
       msg: 'Send messenger',

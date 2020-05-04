@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import CropOriginalIcon from '@material-ui/icons/CropOriginal';
@@ -7,6 +8,8 @@ import InputBase from '@material-ui/core/InputBase';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import SendIcon from '@material-ui/icons/Send';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { sendMess } from '../../redux/action/mesengerAction';
 
 const useStyles = makeStyles((theme) => ({
   inputRoot: {
@@ -29,9 +32,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MessengerBottom = () => {
+const MessengerBottom = ({ sendMess, receiverId }) => {
   const classes = useStyles();
   const [text, setText] = useState('');
+
+  const onSend = () => {
+    sendMess(text, receiverId);
+    setText('');
+  };
 
   return (
     <div
@@ -56,7 +64,7 @@ const MessengerBottom = () => {
         inputProps={{ 'aria-label': 'search' }}
       />
       {text !== '' ? (
-        <SendIcon className={classes.icon} />
+        <SendIcon className={classes.icon} onClick={onSend} />
       ) : (
         <ThumbUpIcon className={classes.icon} />
       )}
@@ -64,4 +72,8 @@ const MessengerBottom = () => {
   );
 };
 
-export default MessengerBottom;
+const mapStateToProps = (state) => ({
+  receiverId: state.conversation.receiverId,
+});
+
+export default connect(mapStateToProps, { sendMess })(MessengerBottom);

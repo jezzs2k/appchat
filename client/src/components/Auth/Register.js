@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
-import { register } from '../../action/authAction';
+import { register } from '../../redux/action/authAction';
 
 import useStyle from './RegisterCss';
 

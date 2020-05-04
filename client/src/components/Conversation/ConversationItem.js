@@ -13,22 +13,36 @@ const ConversationItem = ({
   index,
   selectedIndex,
   handleListItemClick,
+  userId,
 }) => {
-  const { name, avatar, lastMess } = item;
+  const { sender, receiver, lastMess } = item;
+
   return (
     <ListItem
       button
       selected={selectedIndex === index}
-      onClick={(event) => handleListItemClick(event, index)}
+      onClick={(event) =>
+        sender._id === userId
+          ? handleListItemClick(event, index, item._id, receiver._id)
+          : handleListItemClick(event, index, item._id, sender._id)
+      }
       style={{
         borderRadius: '15px',
         backGroundColor: '#f2f2f2',
         fontSize: '0.8em',
       }}>
       <ListItemIcon>
-        <Avatar alt={name} src={avatar} />
+        {sender._id === userId ? (
+          <Avatar alt={receiver.name} src={receiver.avatar} />
+        ) : (
+          <Avatar alt={sender.name} src={sender.avatar} />
+        )}
       </ListItemIcon>
-      <ListItemText primary={name} secondary={`${lastMess} 15:05`} />
+      {sender._id === userId ? (
+        <ListItemText primary={receiver.name} secondary={`${lastMess} 15:05`} />
+      ) : (
+        <ListItemText primary={sender.name} secondary={`${lastMess} 15:05`} />
+      )}
       <Button>
         <MoreHorizOutlinedIcon />
       </Button>

@@ -1,71 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import ConversationItem from './ConversationItem';
+import { getMess } from '../../redux/action/mesengerAction';
+import { setReceiver } from '../../redux/action/conversationAction';
 
-const dataDemo = [
-  {
-    _id: 1,
-    name: 'Just is demo name1',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-  {
-    _id: 2,
-    name: 'Just is demo name',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-  {
-    _id: 3,
-    name: 'Just is demo name',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-  {
-    _id: 4,
-    name: 'Just is demo name',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-  {
-    _id: 5,
-    name: 'Just is demo name',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-  {
-    _id: 6,
-    name: 'Just is demo name',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-  {
-    _id: 7,
-    name: 'Just is demo name',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-  {
-    _id: 8,
-    name: 'Just is demo name',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-  {
-    _id: 9,
-    name: 'Just is demo name',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-  {
-    _id: 10,
-    name: 'Just is demo name',
-    avatar: 'dd',
-    lastMess: 'Xin Chao',
-  },
-];
+import {
+  getConversation,
+  getConversationLatest,
+  setloading,
+  setCurrentConversation,
+} from '../../redux/action/conversationAction';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,30 +23,97 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Conversation = () => {
+const Conversation = ({
+  isAuthenticated,
+  conversation,
+  getConversation,
+  getConversationLatest,
+  setloading,
+  user,
+  getMess,
+  setReceiver,
+  setCurrentConversation,
+}) => {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const handleListItemClick = (event, index) => {
+  const handleListItemClick = (event, index, conversationId, receiverId) => {
     setSelectedIndex(index);
+    setCurrentConversation(conversationId);
+    getMess(conversationId);
+    setReceiver(receiverId);
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setloading();
+      getConversationLatest();
+      getConversation();
+    }
+    // eslint-disable-next-line
+  }, [isAuthenticated]);
+
+  const { conversations, loading } = conversation;
 
   return (
     <div className={classes.root}>
       <List component='nav' aria-label='main mailbox folders'>
-        {dataDemo.length > 0 &&
-          dataDemo.map((item, i) => (
+        {loading ? (
+          <div>
+            <Skeleton variant='text' />
+            <Skeleton variant='circle' width={40} height={40} />
+            <Skeleton variant='rect' style={{ width: '100%' }} height={118} />
+            <Skeleton variant='text' />
+            <Skeleton variant='circle' width={40} height={40} />
+            <Skeleton variant='rect' style={{ width: '100%' }} height={118} />
+            <Skeleton variant='text' />
+            <Skeleton variant='circle' width={40} height={40} />
+            <Skeleton variant='rect' style={{ width: '100%' }} height={118} />
+            <Skeleton variant='text' />
+            <Skeleton variant='circle' width={40} height={40} />
+            <Skeleton variant='rect' style={{ width: '100%' }} height={118} />
+            <Skeleton variant='text' />
+            <Skeleton variant='circle' width={40} height={40} />
+            <Skeleton variant='rect' style={{ width: '100%' }} height={118} />
+            <Skeleton variant='text' />
+            <Skeleton variant='circle' width={40} height={40} />
+            <Skeleton variant='rect' style={{ width: '100%' }} height={118} />
+            <Skeleton variant='text' />
+            <Skeleton variant='circle' width={40} height={40} />
+            <Skeleton variant='rect' style={{ width: '100%' }} height={118} />
+            <Skeleton variant='text' />
+            <Skeleton variant='circle' width={40} height={40} />
+            <Skeleton variant='rect' style={{ width: '100%' }} height={118} />
+          </div>
+        ) : (
+          conversations.length > 0 &&
+          conversations.map((item, i) => (
             <ConversationItem
               key={item._id}
               item={item}
               selectedIndex={selectedIndex}
               handleListItemClick={handleListItemClick}
               index={i}
+              userId={user._id}
             />
-          ))}
+          ))
+        )}
       </List>
     </div>
   );
 };
 
-export default Conversation;
+const mapStateToProps = (state) => ({
+  conversation: state.conversation,
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, {
+  getConversation,
+  getConversationLatest,
+  setloading,
+  getMess,
+  setReceiver,
+  setCurrentConversation,
+})(Conversation);

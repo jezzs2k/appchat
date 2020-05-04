@@ -14,14 +14,15 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import TelegramIcon from '@material-ui/icons/Telegram';
 import Avatar from '@material-ui/core/Avatar';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import { loadUser } from '../../action/authAction';
+import { loadUser, logout } from '../../redux/action/authAction';
 
 import useStyles from './NavbarCss';
 
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ loadUser, user, isAuthenticated }) => {
+const Navbar = ({ loadUser, user, isAuthenticated, logout }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -63,8 +64,15 @@ const Navbar = ({ loadUser, user, isAuthenticated }) => {
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={handleMenuClose}>
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem
+        onClick={() => {
+          handleMenuClose();
+          logout();
+        }}>
+        Logout
+        <ExitToAppIcon />
+      </MenuItem>
     </Menu>
   );
 
@@ -209,4 +217,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(mapStateToProps, { loadUser })(Navbar);
+export default connect(mapStateToProps, { loadUser, logout })(Navbar);

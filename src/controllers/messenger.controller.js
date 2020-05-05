@@ -1,7 +1,11 @@
-const { getMessengers, sendMessenger } = require('../models/Messenger.model');
+const {
+  getMessengers,
+  sendMessenger,
+  getMessengerById,
+} = require('../models/Messenger.model');
 const { validationResult } = require('express-validator');
 
-const httpStatus = require('../config/httpStatus');
+const { success, error, create } = require('../utils/response');
 
 //@ router   GET /api/messengers/id
 //@ des      get all messenger by conversation and use id of conversation
@@ -12,18 +16,10 @@ module.exports.getMess = async (req, res) => {
 
     const messengers = await getMessengers(conversationId);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'get messenger of user',
-      data: { messengers },
-      success: true,
-    });
+    return success(res, 'get messenger of user', { messengers }, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
@@ -39,23 +35,17 @@ module.exports.sendMess = async (req, res) => {
       return;
     }
 
-    const newMessenger = await sendMessenger(
+    const messenger = await sendMessenger(
       req.user.id,
       req.body.receiverId,
       req.body.text
     );
 
-    return res.status(httpStatus.CREATED).json({
-      msg: 'Send messenger',
-      data: { newMessenger },
-      success: true,
-    });
+    const newMessenger = await getMessengerById(messenger._id);
+
+    return create(res, 'Send messenger', { newMessenger }, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };

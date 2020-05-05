@@ -8,7 +8,7 @@ module.exports.getAllUser = async () => {
       {
         limit: 10,
       }
-    ).select('_id name avatar');
+    ).select('-password');
 
     return users;
   } catch (err) {
@@ -19,7 +19,7 @@ module.exports.getAllUser = async () => {
 module.exports.getUserById = async (id) => {
   try {
     const user = await User.findOne({ _id: id, isActive: true }).select(
-      '_id name avatar'
+      '-password'
     );
     if (!user) {
       throw new Error('Nguoi dung khong ton tai');
@@ -32,7 +32,7 @@ module.exports.getUserById = async (id) => {
 
 module.exports.updateUser = async (_id, data) => {
   try {
-    const userStore = await User.findById(_id).select('local');
+    const userStore = await User.findById(_id);
     if (!userStore) {
       throw new Error('Nguoi dung khong ton tai');
     }
@@ -41,7 +41,7 @@ module.exports.updateUser = async (_id, data) => {
       _id,
       { $set: data },
       { new: true }
-    ).select('_id name updatedAt avatar age phone');
+    ).select('-password');
 
     return user;
   } catch (err) {
@@ -51,7 +51,7 @@ module.exports.updateUser = async (_id, data) => {
 
 module.exports.deleteUser = async (_id) => {
   try {
-    const userStore = await User.findById(_id).select('_id');
+    const userStore = await User.findById(_id);
 
     if (!userStore) {
       throw new Error('Nguoi dung khong ton tai');

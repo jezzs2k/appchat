@@ -5,16 +5,16 @@ const authMiddleware = require('../middleware/auth.middleware');
 
 const {
   makeFriend,
-  deleteMakeFriend,
+  deleteFriendRequest,
   getFriends,
   acceptFriend,
-  getNoFriend,
+  getFriendRequest,
 } = require('../controllers/contact.controller');
 
 router.post('/', authMiddleware, makeFriend);
-router.delete('/:id', authMiddleware, deleteMakeFriend);
+router.delete('/:id', authMiddleware, deleteFriendRequest);
 router.put('/friend', authMiddleware, acceptFriend);
 router.get('/profile/friends', authMiddleware, getFriends);
-router.get('/friends/require', authMiddleware, getNoFriend);
+router.get('/friends/require', authMiddleware, getFriendRequest);
 
 module.exports = router;

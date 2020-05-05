@@ -81,8 +81,8 @@ const Messenger = ({
         userId === latestConversation.sender._id
           ? latestConversation.receiver._id
           : latestConversation.sender._id;
-      setCurrentConversation(latestConversation._id);
       setReceiver(contactId);
+      setCurrentConversation(latestConversation._id);
       getMess(latestConversation._id);
     }
     // eslint-disable-next-line
@@ -91,7 +91,8 @@ const Messenger = ({
   useEffect(() => {
     if (conversation.currentConversationId !== null) {
       socket.on('messenger', (messenger) => {
-        if (conversation.currentConversationId === messenger.conversationId) {
+        console.log(conversation.currentConversationId, messenger.conversation);
+        if (conversation.currentConversationId === messenger.conversation) {
           addMess(messenger);
         }
         getConversation();

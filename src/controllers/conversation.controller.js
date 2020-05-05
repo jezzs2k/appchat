@@ -3,7 +3,7 @@ const {
   getLatestConversation,
 } = require('../models/Conversation.model');
 
-const httpStatus = require('../config/httpStatus');
+const { success, error } = require('../utils/response');
 
 //@ router   GET /api/conversations
 //@ des      get all conversation
@@ -13,18 +13,10 @@ module.exports.getConversations = async (req, res) => {
     const currentUserId = req.user.id;
     const conversations = await getConversations(currentUserId);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'GET CONVERSATION',
-      data: { conversations },
-      success: true,
-    });
+    return success(res, 'GET CONVERSATION', { conversations }, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
@@ -36,17 +28,14 @@ module.exports.getLatestConversation = async (req, res) => {
     const currentUserId = req.user.id;
     const latestConversation = await getLatestConversation(currentUserId);
 
-    return res.status(200).json({
-      msg: 'GET LATEST CONVERSATION',
-      data: { latestConversation },
-      success: true,
-    });
+    return success(
+      res,
+      'GET LATEST CONVERSATION',
+      { latestConversation },
+      true
+    );
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };

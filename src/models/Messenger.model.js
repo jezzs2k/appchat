@@ -1,11 +1,15 @@
 const { Messenger } = require('../schema/Messenger');
-const { findReceiver } = require('./Conversation.model');
+const {
+  checkConversationExists,
+  createConversation,
+  updateConversation,
+} = require('./Conversation.model');
 
 module.exports.getMessengers = async (conversationId) => {
   try {
     const messengers = await Messenger.find({
-      conversationId,
-    });
+      conversation: conversationId,
+    }).populate('sender receiver');
 
     return messengers;
   } catch (err) {
@@ -13,38 +17,28 @@ module.exports.getMessengers = async (conversationId) => {
   }
 };
 
+module.exports.getMessengerById = async (id) => {
+  try {
+    const messenger = await Messenger.findById(id).populate('sender receiver');
+
+    return messenger;
+  } catch (err) {
+    throw err;
+  }
+};
+
 module.exports.sendMessenger = async (senderId, receiverId, text) => {
   try {
-    const conversation = await findReceiver(senderId, receiverId, text);
-    const { sender, receiver } = conversation;
+    const onConversation = await checkConversationExists(senderId, receiverId);
 
-    let newMessenger = null;
+    await updateConversation(onConversation, text);
 
-    if (sender._id == senderId) {
-      newMessenger = new Messenger({
-        sender: {
-          ...sender,
-        },
-        receiver: {
-          ...receiver,
-        },
-        text: text,
-        conversationId: conversation._id,
-      });
-    }
-
-    if (sender._id == receiverId) {
-      newMessenger = new Messenger({
-        sender: {
-          ...receiver,
-        },
-        receiver: {
-          ...sender,
-        },
-        text: text,
-        conversationId: conversation._id,
-      });
-    }
+    const newMessenger = new Messenger({
+      sender: senderId,
+      receiver: receiverId,
+      text,
+      conversation: onConversation,
+    }).populate('sender receiver');
 
     await newMessenger.save();
 

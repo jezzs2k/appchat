@@ -14,12 +14,6 @@ const ContactSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    createAt: {
-      type: Number,
-    },
-    deleteAt: {
-      type: Number,
-    },
   },
   {
     timestamps: true,

@@ -31,15 +31,6 @@ const UserSchema = new Schema(
       },
     },
     google: {},
-    createAt: {
-      type: Number,
-    },
-    updateAt: {
-      type: Number,
-    },
-    deleteAt: {
-      type: Number,
-    },
   },
   {
     timestamps: true,

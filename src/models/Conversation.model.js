@@ -1,8 +1,15 @@
 const { Conversation } = require('../schema/Conversation');
 const { getUserById } = require('./User.model');
 
-const createConversation = async ({ sender, receiver, text }) => {
+module.exports.createConversation = async ({
+  senderId,
+  receiverId,
+  text = 'xin chao',
+}) => {
   try {
+    const sender = await getUserById(senderId);
+    const receiver = await getUserById(receiverId);
+
     const newConversation = new Conversation({
       sender,
       receiver,
@@ -17,36 +24,20 @@ const createConversation = async ({ sender, receiver, text }) => {
   }
 };
 
-module.exports.findReceiver = async (
-  senderId,
-  receiverId,
-  text = 'Xin Chao'
-) => {
+module.exports.checkConversationExists = async (senderId, receiverId) => {
   try {
-    let conversation = await Conversation.findOne({
+    const conversation = await Conversation.findOne({
       $or: [
-        { 'sender._id': senderId, 'receiver._id': receiverId },
-        { 'receiver._id': senderId, 'sender._id': receiverId },
+        { sender: senderId, receiver: receiverId },
+        { receiver: senderId, sender: receiverId },
       ],
-    }).select('_id sender receiver');
+    });
 
     if (!conversation) {
-      const sender = await getUserById(senderId);
-      const receiver = await getUserById(receiverId);
-
-      conversation = createConversation({ sender, receiver, text });
+      return null;
     } else {
-      conversation = await Conversation.findByIdAndUpdate(
-        { _id: conversation._id },
-        {
-          $set: {
-            lastMess: text,
-          },
-        }
-      );
+      return conversation._id;
     }
-
-    return conversation;
   } catch (err) {
     throw err;
   }
@@ -56,14 +47,11 @@ module.exports.getLatestConversation = async (currentUserId) => {
   try {
     const conversationLatest = await Conversation.findOne(
       {
-        $or: [
-          { 'sender._id': currentUserId },
-          { 'receiver._id': currentUserId },
-        ],
+        $or: [{ sender: currentUserId }, { receiver: currentUserId }],
       },
       [],
       { sort: { updatedAt: -1 } }
-    );
+    ).populate('sender receiver');
 
     return conversationLatest;
   } catch (err) {
@@ -75,20 +63,51 @@ module.exports.getConversations = async (currentUserId) => {
   try {
     const conversations = await Conversation.find(
       {
-        $or: [
-          { 'sender._id': currentUserId },
-          { 'receiver._id': currentUserId },
-        ],
+        $or: [{ sender: currentUserId }, { receiver: currentUserId }],
       },
       [],
       { sort: { updatedAt: -1 } }
-    );
+    ).populate('sender receiver');
 
     if (!conversations) {
       throw new Error("User don't have messenger");
     }
 
     return conversations;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.updateConversation = async (conversationId, text) => {
+  try {
+    const conversation = await Conversation.findByIdAndUpdate(
+      { _id: conversationId },
+      {
+        $set: {
+          lastMess: text,
+          isRead: false,
+        },
+      }
+    );
+
+    return conversation;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.hasRead = async () => {
+  try {
+    const conversation = await Conversation.findByIdAndUpdate(
+      { _id: conversationId },
+      {
+        $set: {
+          isRead: false,
+        },
+      }
+    );
+    return conversation;
   } catch (err) {
     throw err;
   }

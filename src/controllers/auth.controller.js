@@ -1,7 +1,8 @@
 const { validationResult } = require('express-validator');
 
 const { login, register } = require('../models/Auth.model');
-const httpStatus = require('../config/httpStatus');
+
+const { success, error, create } = require('../utils/response');
 
 //@ router   POST /api/auth/login
 //@ des      login into app
@@ -11,7 +12,7 @@ module.exports.login = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.status(httpStatus.BAD_REQUEST).json({ errors: errors.array() });
+      res.status(400).json({ errors: errors.array() });
       return;
     }
 
@@ -22,18 +23,10 @@ module.exports.login = async (req, res) => {
 
     const token = await login(data);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'LOGIN',
-      data: { token },
-      success: true,
-    });
+    return success(res, 'Login', { token }, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: err.message,
-      data: null,
-      success: false,
-    });
+    error(err.message, null, false);
   }
 };
 
@@ -57,17 +50,9 @@ module.exports.register = async (req, res) => {
 
     const token = await register(data);
 
-    return res.status(httpStatus.CREATED).json({
-      msg: 'REGISTER',
-      data: { token },
-      success: true,
-    });
+    return create('Register', { token }, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: err.message,
-      data: null,
-      success: false,
-    });
+    error(err.message, null, false);
   }
 };

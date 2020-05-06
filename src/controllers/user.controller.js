@@ -5,7 +5,7 @@ const {
   deleteUser,
 } = require('../models/User.model');
 
-const httpStatus = require('../config/httpStatus');
+const { success, error } = require('../utils/response');
 
 //@ router   GET /api/users
 //@ des      get all user
@@ -14,18 +14,10 @@ module.exports.getAllUser = async (req, res) => {
   try {
     const users = await getAllUser();
 
-    return res.status(httpStatus.ok).json({
-      msg: 'GET USERS',
-      data: users,
-      success: true,
-    });
+    return success(res, 'GET USERS', users, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
@@ -37,18 +29,10 @@ module.exports.getUser = async (req, res) => {
     const userId = req.user.id;
     const user = await getUserById(userId);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'GET USER',
-      data: user,
-      success: true,
-    });
+    return success(res, 'GET USER', user, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
@@ -61,18 +45,10 @@ module.exports.getUserById = async (req, res) => {
 
     const user = await getUserById(userId);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'GET USER BY ID',
-      data: user,
-      success: true,
-    });
+    return success(res, 'GET USER BY ID', user, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
@@ -86,18 +62,10 @@ module.exports.updateUser = async (req, res) => {
 
     const user = await updateUser(userId, data);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'UPDATE USER',
-      data: user,
-      success: true,
-    });
+    return success(res, 'UPDATE USER', user, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
@@ -108,19 +76,11 @@ module.exports.deleteUser = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const byeUser = await deleteUser(userId);
+    const removeUser = await deleteUser(userId);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'DELETE USER',
-      data: byeUser,
-      success: true,
-    });
+    return success(res, 'DELETE USER', removeUser, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };

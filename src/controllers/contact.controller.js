@@ -1,11 +1,12 @@
 const {
-  createContact,
-  deleteContact,
-  acceptContact,
-  getFriendActive,
-  getFriendNoActive,
+  createFriendRequest,
+  deleteFriend,
+  acceptFriendRequest,
+  getFriendRequest,
+  getFriend,
 } = require('../models/Contact.model');
-const httpStatus = require('../config/httpStatus');
+
+const { success, error, create } = require('../utils/response');
 
 //@ router   POST /api/contacts
 //@ des      make friend
@@ -15,45 +16,29 @@ module.exports.makeFriend = async (req, res) => {
     const userId = req.user.id;
     const contactId = req.body.contactId;
 
-    const newContact = await createContact({ userId, contactId });
+    const newContact = await createFriendRequest({ userId, contactId });
 
-    return res.status(httpStatus.CREATED).json({
-      msg: 'SEND REQUEST FRIEND',
-      data: { newContact },
-      success: true,
-    });
+    return create('SEND REQUEST FRIEND', { newContact }, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'Internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
 //@ router   DELETE /api/contacts
 //@ des      delete make friend and require friend
 //@ access   private
-module.exports.deleteMakeFriend = async (req, res) => {
+module.exports.deleteFriendRequest = async (req, res) => {
   try {
     const userId = req.user.id;
     const contactId = req.params.id;
 
-    await deleteContact({ userId, contactId });
+    await deleteFriend({ userId, contactId });
 
-    return res.status(httpStatus.ok).json({
-      msg: 'DELETE REQUEST FRIEND',
-      data: null,
-      success: true,
-    });
+    return success('DELETE REQUEST FRIEND', null, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'Internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
@@ -66,24 +51,14 @@ module.exports.acceptFriend = async (req, res) => {
 
     const contact = {
       _id: req.body.contactId,
-      name: req.body.name,
-      avatar: req.body.avatar,
     };
 
-    const friend = await acceptContact(userId, contact);
+    const friend = await acceptFriendRequest(userId, contact);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'ACCEPT FRIEND COMPLETE',
-      data: { friend },
-      success: true,
-    });
+    return success('ACCEPT FRIEND COMPLETE', { friend }, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'Internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
@@ -93,42 +68,26 @@ module.exports.acceptFriend = async (req, res) => {
 module.exports.getFriends = async (req, res) => {
   try {
     const userId = req.user.id;
-    const friends = await getFriendActive(userId);
+    const friends = await getFriend(userId);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'GET FRIENDS',
-      data: { friends },
-      success: true,
-    });
+    return success(res, 'GET FRIENDS', { friends }, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'Internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };
 
 //@ router   GET /api/contacts/friends/private
 //@ des      get friend require
 //@ access   private
-module.exports.getNoFriend = async (req, res) => {
+module.exports.getFriendRequest = async (req, res) => {
   try {
     const userId = req.user.id;
-    const friends = await getFriendNoActive(userId);
+    const friends = await getFriendRequest(userId);
 
-    return res.status(httpStatus.ok).json({
-      msg: 'GET NO FRIENDS',
-      data: { friends },
-      success: true,
-    });
+    return success(res, 'GET NO FRIENDS', { friends }, true);
   } catch (err) {
     console.error(err.message);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      msg: 'Internal server error',
-      data: null,
-      success: false,
-    });
+    error(res, 'internal server error', null, false);
   }
 };

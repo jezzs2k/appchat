@@ -7,34 +7,17 @@ const ConversationSchema = new Schema(
       required: true,
     },
     sender: {
-      _id: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-      },
-      name: {
-        type: String,
-        required: true,
-      },
-      avatar: {
-        type: String,
-        required: true,
-      },
+      type: Schema.Types.ObjectId,
+      ref: 'user',
     },
     receiver: {
-      _id: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-      },
-      name: {
-        type: String,
-        required: true,
-      },
-      avatar: {
-        type: String,
-        required: true,
-      },
+      type: Schema.Types.ObjectId,
+      ref: 'user',
     },
-    createAt: Number,
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

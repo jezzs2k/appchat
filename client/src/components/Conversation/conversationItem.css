@@ -6,3 +6,8 @@
 .MuiListItemText-secondary {
   font-size: 1em !important;
 }
+
+.MuiTypography-colorTextSecondary.isRead {
+  color: black !important;
+  font-weight: 800;
+}

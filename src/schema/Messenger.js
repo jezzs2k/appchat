@@ -3,38 +3,21 @@ const { Schema, model } = require('mongoose');
 const MessengerSchema = new Schema(
   {
     sender: {
-      name: {
-        type: String,
-        required: true,
-      },
-      avatar: {
-        type: String,
-        required: true,
-      },
+      type: Schema.Types.ObjectId,
+      ref: 'user',
     },
     receiver: {
-      name: {
-        type: String,
-        required: true,
-      },
-      avatar: {
-        type: String,
-        required: true,
-      },
+      type: Schema.Types.ObjectId,
+      ref: 'user',
     },
     text: {
       type: String,
       require: true,
     },
-    conversationId: {
+    conversation: {
       type: Schema.Types.ObjectId,
       ref: 'conversation',
     },
-    isRead: {
-      type: Boolean,
-      require: true,
-    },
-    createAt: Number,
   },
   {
     timestamps: true,

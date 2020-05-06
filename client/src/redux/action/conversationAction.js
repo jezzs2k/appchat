@@ -57,7 +57,7 @@ export const setCurrentConversation = (conversationId) => async (dispatch) => {
   });
 };
 
-export const setloading = () => async (dispatch) => {
+export const setLoading = () => async (dispatch) => {
   dispatch({
     type: SET_LOADING,
   });

@@ -9,7 +9,8 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import SendIcon from '@material-ui/icons/Send';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { sendMess } from '../../redux/action/mesengerAction';
+import { sendMess } from '../../redux/action/messengerAction';
+import { getConversation } from '../../redux/action/conversationAction';
 
 const useStyles = makeStyles((theme) => ({
   inputRoot: {
@@ -32,12 +33,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MessengerBottom = ({ sendMess, receiverId }) => {
+const MessengerBottom = ({ sendMess, receiverId, getConversation }) => {
   const classes = useStyles();
   const [text, setText] = useState('');
 
   const onSend = () => {
     sendMess(text, receiverId);
+    getConversation();
     setText('');
   };
 
@@ -76,4 +78,7 @@ const mapStateToProps = (state) => ({
   receiverId: state.conversation.receiverId,
 });
 
-export default connect(mapStateToProps, { sendMess })(MessengerBottom);
+export default connect(mapStateToProps, {
+  sendMess,
+  getConversation,
+})(MessengerBottom);

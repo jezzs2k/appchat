@@ -14,6 +14,10 @@ const ConversationSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'user',
     },
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

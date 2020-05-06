@@ -9,7 +9,7 @@ module.exports.success = (res, msg, data, success) => {
 };
 
 module.exports.create = (res, msg, data, success) => {
-  return res.status(state).json({
+  return res.status(httpStatus.CREATED).json({
     msg,
     data,
     success,

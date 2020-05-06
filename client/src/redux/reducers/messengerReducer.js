@@ -38,10 +38,15 @@ export default (state = initalState, action) => {
         messengers: [],
       };
     case ADD_MESSENGER:
+      if (action.payload.conversation === state.messengers[0].conversation) {
+        return {
+          ...state,
+          error: null,
+          messengers: [...state.messengers, action.payload],
+        };
+      }
       return {
         ...state,
-        error: null,
-        messengers: [...state.messengers, action.payload],
       };
     default:
       return {

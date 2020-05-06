@@ -18,10 +18,6 @@ const MessengerSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'conversation',
     },
-    isRead: {
-      type: Boolean,
-      require: true,
-    },
   },
   {
     timestamps: true,

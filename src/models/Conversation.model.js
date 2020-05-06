@@ -86,10 +86,27 @@ module.exports.updateConversation = async (conversationId, text) => {
       {
         $set: {
           lastMess: text,
+          isRead: false,
         },
       }
     );
 
+    return conversation;
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports.hasRead = async () => {
+  try {
+    const conversation = await Conversation.findByIdAndUpdate(
+      { _id: conversationId },
+      {
+        $set: {
+          isRead: false,
+        },
+      }
+    );
     return conversation;
   } catch (err) {
     throw err;

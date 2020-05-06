@@ -5,13 +5,13 @@ import List from '@material-ui/core/List';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import ConversationItem from './ConversationItem';
-import { getMess } from '../../redux/action/mesengerAction';
+import { getMess } from '../../redux/action/messengerAction';
 import { setReceiver } from '../../redux/action/conversationAction';
 
 import {
   getConversation,
   getConversationLatest,
-  setloading,
+  setLoading,
   setCurrentConversation,
 } from '../../redux/action/conversationAction';
 
@@ -24,15 +24,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Conversation = ({
-  isAuthenticated,
-  conversation,
+  conversation: { conversations, loading, latestConversation },
   getConversation,
   getConversationLatest,
-  setloading,
+  setLoading,
   user,
-  getMess,
   setReceiver,
   setCurrentConversation,
+  getMess,
 }) => {
   const classes = useStyles();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -40,20 +39,28 @@ const Conversation = ({
   const handleListItemClick = (event, index, conversationId, receiverId) => {
     setSelectedIndex(index);
     setCurrentConversation(conversationId);
-    getMess(conversationId);
     setReceiver(receiverId);
+    getMess(conversationId);
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      setloading();
-      getConversationLatest();
-      getConversation();
+    setLoading();
+    getConversationLatest();
+    getConversation();
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (latestConversation) {
+      setCurrentConversation(latestConversation._id);
+      const receiverId =
+        user._id === latestConversation.receiver._id
+          ? latestConversation.sender._id
+          : latestConversation.receiver._id;
+      setReceiver(receiverId);
     }
     // eslint-disable-next-line
-  }, [isAuthenticated]);
-
-  const { conversations, loading } = conversation;
+  }, [latestConversation]);
 
   return (
     <div className={classes.root}>
@@ -112,7 +119,7 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   getConversation,
   getConversationLatest,
-  setloading,
+  setLoading,
   getMess,
   setReceiver,
   setCurrentConversation,
